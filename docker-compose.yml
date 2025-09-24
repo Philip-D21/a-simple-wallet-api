@@ -1,0 +1,31 @@
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: remittra
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  app:
+    build: .
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: remittra
+      PGSSL: "false"
+      JWT_SECRET: change_me_in_prod
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+volumes:
+  pgdata:
+
